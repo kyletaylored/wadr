@@ -1,5 +1,5 @@
 /**
- * Creates a ML Tools menu in Google Spreadsheets.
+ * Creates an Actions menu in Google Spreadsheets.
  */
 function onOpen() {
   SpreadsheetApp.getUi()
@@ -31,7 +31,8 @@ function prepareSheet(ss) {
 function processUrls() {
   // Setup variables.
   var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var dataSheet = ss.getActiveSheet();
+  var dataSheet = ss.getSheets()[0];
+  //var dataSheet = ss.getActiveSheet();
   var rows = dataSheet.getDataRange();
   var numRows = rows.getNumRows();
   var values = rows.getValues();
@@ -67,7 +68,7 @@ function processUrls() {
         // Paste "complete" into next column to denote completion of Wappalyzer call
         // dataSheet.getRange(i, domainColumn+1).setValue("complete");
      }
-     Utilities.sleep(2000);// pause in the loop for 200 milliseconds
+     Utilities.sleep(1500);// pause in the loop for 200 milliseconds
    }
 };
 
@@ -81,6 +82,6 @@ function getCategories (url) {
   var apiEndpoint = "https://us-central1-wadr-report.cloudfunctions.net/process-domain?url=" + url;
 
   //  Fetch data
-  var response = UrlFetchApp.fetch(apiEndpoint);
+  var response = UrlFetchApp.fetch(apiEndpoint, {muteHttpExceptions: true});
   return JSON.parse(response);
 };

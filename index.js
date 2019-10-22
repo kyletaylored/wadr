@@ -1,6 +1,6 @@
 const Wappalyzer = require("wappalyzer");
 const normalizeUrl = require("normalize-url");
-var request = require("request");
+const request = require("request");
 
 // Wappalyzer options
 const options = {
@@ -55,6 +55,7 @@ exports.processDomain = async (req, res) => {
 function getRealUrl(url) {
   url = normalizeUrl(url);
   var r = request.get(url);
+  console.log(r.redirects);
   return r.uri.href;
 }
 
