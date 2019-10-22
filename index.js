@@ -40,7 +40,7 @@ exports.processDomain = async (req, res) => {
       })
       .catch(error => {
         console.error(error)
-        return null
+        return {}
       })
     if (data.hasOwnProperty('applications')) {
       processApps(data.applications)
