@@ -3,7 +3,7 @@
  */
 function onOpen() {
   SpreadsheetApp.getUi()
-    .createMenu('ML Tools')
+    .createMenu('Actions')
     .addItem('Process Wappalyzer URLs', 'processUrls')
     .addToUi();
 };
