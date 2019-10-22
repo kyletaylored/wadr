@@ -1,5 +1,6 @@
 const Wappalyzer = require("wappalyzer");
 const normalizeUrl = require("normalize-url");
+var request = require("request");
 
 // Wappalyzer options
 const options = {
@@ -30,7 +31,8 @@ exports.processDomain = async (req, res) => {
   if (req.query.hasOwnProperty("url")) {
     let results = [];
     //   Normalize URL
-    let url = normalizeUrl(req.query.url);
+    let url = getRealUrl(req.query.url);
+
     // Prepare Wappalyzer
     const wappalyzer = new Wappalyzer(url, options);
     let data = await wappalyzer
@@ -49,6 +51,12 @@ exports.processDomain = async (req, res) => {
   }
   res.send("Hello, World");
 };
+
+function getRealUrl(url) {
+  url = normalizeUrl(url);
+  var r = request.get(url);
+  return r.uri.href;
+}
 
 /**
  * Process all detected Wappalyzer applications

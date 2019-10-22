@@ -15,8 +15,8 @@ function prepareSheet(ss) {
  if (domainReport == null) {
   ss.insertSheet(sheetName);
   var domainReport = ss.getSheetByName(sheetName);
-  var esHeaderRange = domainReport.getRange(1,1,1,6);
-  var esHeader = [['URL','CMS','Web Server','CDN','PaaS','Reverse Proxy', 'Pages']];
+  var esHeaderRange = domainReport.getRange(1,1,1,7);
+  var esHeader = [['Domain','CMS','Web Server','CDN','PaaS','Reverse Proxy', 'Pages']];
   esHeaderRange.setValues(esHeader);
  }; 
  return domainReport;
@@ -50,26 +50,24 @@ function processUrls() {
   
   ss.toast("Analyzing domains...");
   // Process each row 
-  for (var i = 0; i < numRows; ++i) {
+  for (var i = 1; i < numRows; ++i) {
     var value = values[i];
     var domain = value[domainColumn];
+    Logger.log('domaincolum', domainColumn);
+    Logger.log(domain);
     
     // Call getCategories function for each row that has a domain.
-    if(domain) {
+    if (domain) {
         var data = getCategories(domain);
+        Logger.log(data);
         // Paste categories into new sheet.
-        var newValues = []
-        for each (var cat in data) {
-          var row = [domain];
-          row.push(data['1'], data['22'], data['27'], data['31'], data['62'], data['64']);
-          newValues.push(row);
-        }
-        if(newValues.length) {
-          domainReport.getRange(domainReport.getLastRow() + 1, 1, newValues.length, newValues[0].length).setValues(newValues);
-        }
+        var row = [];
+        row.push(domain, data['1'], data['22'], data['27'], data['31'], data['62'], data['64']);
+        domainReport.appendRow(row);
         // Paste "complete" into next column to denote completion of Wappalyzer call
-        dataSheet.getRange(i+1, domainColumn+1).setValue("complete");
+        // dataSheet.getRange(i, domainColumn+1).setValue("complete");
      }
+     Utilities.sleep(2000);// pause in the loop for 200 milliseconds
    }
 };
 
