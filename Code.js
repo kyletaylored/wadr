@@ -68,7 +68,7 @@ function processUrls() {
         // Paste "complete" into next column to denote completion of Wappalyzer call
         // dataSheet.getRange(i, domainColumn+1).setValue("complete");
      }
-     Utilities.sleep(1500);// pause in the loop for 200 milliseconds
+     Utilities.sleep(1000);// pause in the loop
    }
 };
 
