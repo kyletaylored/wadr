@@ -26,6 +26,9 @@ exports.helloWorld = (req, res) => {
   res.send("Hello, World");
 };
 
+/**
+ * Process domain requests.
+ */
 exports.processDomain = async (req, res) => {
   //   Check for URL query param
   if (req.query.hasOwnProperty("url")) {
@@ -47,11 +50,14 @@ exports.processDomain = async (req, res) => {
     if (data.hasOwnProperty("applications")) {
       processApps(data.applications);
     }
-    res.send(wapResults);
   }
-  res.send("Hello, World");
+  res.send(wapResults);
 };
 
+/**
+ * Catch any redirects.
+ * @param {string} url A URL link.
+ */
 function getRealUrl(url) {
   url = normalizeUrl(url);
   var r = request.get(url);

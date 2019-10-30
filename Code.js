@@ -54,8 +54,6 @@ function processUrls() {
   for (var i = 1; i < numRows; ++i) {
     var value = values[i];
     var domain = value[domainColumn];
-    Logger.log('domaincolum', domainColumn);
-    Logger.log(domain);
     
     // Call getCategories function for each row that has a domain.
     if (domain) {
@@ -67,6 +65,9 @@ function processUrls() {
         domainReport.appendRow(row);
         // Paste "complete" into next column to denote completion of Wappalyzer call
         // dataSheet.getRange(i, domainColumn+1).setValue("complete");
+      
+        ss.toast(row.join(", "));
+        Logger.log(row);
      }
      Utilities.sleep(1000);// pause in the loop
    }
@@ -83,5 +84,10 @@ function getCategories (url) {
 
   //  Fetch data
   var response = UrlFetchApp.fetch(apiEndpoint, {muteHttpExceptions: true});
-  return JSON.parse(response);
+  Utilities.sleep(1000); // Run twice in a row for testing cache responses.
+  response = UrlFetchApp.fetch(apiEndpoint, {muteHttpExceptions: true});
+  Logger.log(typeof(response));
+  var res = (typeof(response) !== 'object' ) ? JSON.stringify({}) : response;
+  Logger.log(res);
+  return JSON.parse(res);
 };
