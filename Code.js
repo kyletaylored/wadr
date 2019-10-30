@@ -67,9 +67,9 @@ function processUrls() {
         // dataSheet.getRange(i, domainColumn+1).setValue("complete");
       
         ss.toast(row.join(", "));
-        Logger.log(row);
+        console.log(row);
      }
-     Utilities.sleep(1000);// pause in the loop
+     Utilities.sleep(2500);// pause in the loop
    }
 };
 
@@ -84,10 +84,10 @@ function getCategories (url) {
 
   //  Fetch data
   var response = UrlFetchApp.fetch(apiEndpoint, {muteHttpExceptions: true});
-  Utilities.sleep(1000); // Run twice in a row for testing cache responses.
-  response = UrlFetchApp.fetch(apiEndpoint, {muteHttpExceptions: true});
-  Logger.log(typeof(response));
-  var res = (typeof(response) !== 'object' ) ? JSON.stringify({}) : response;
-  Logger.log(res);
+  console.log("responseCode", response.getResponseCode());
+  console.log("contentText", response.getContentText());
+  console.log("headers", response.getHeaders());
+  var res = (parseInt(response.getResponseCode()) !== 200) ? JSON.stringify("{}") : response;
+  console.log("response parse", res);
   return JSON.parse(res);
 };
