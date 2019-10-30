@@ -12,16 +12,6 @@ const options = {
   userAgent: "Wappalyzer"
 };
 
-// Default Wappalyzer Groups
-let wapResults = {
-  "1": [], // CMS (Drupal, WordPress)
-  "22": [], // Web Server (Apache, Nginx)
-  "27": [], // Programming Language (PHP, ASP.net, etc),
-  "31": [], // CDN (CloudFlare, etc)
-  "62": [], // PaaS (Pantheon, Acquia, etc)
-  "64": [] // Reverse proxy (Nginx)
-};
-
 exports.helloWorld = (req, res) => {
   res.send("Hello, World");
 };
@@ -30,6 +20,16 @@ exports.helloWorld = (req, res) => {
  * Process domain requests.
  */
 exports.processDomain = async (req, res) => {
+  // Default Wappalyzer Groups
+  let wapResults = {
+    "1": [], // CMS (Drupal, WordPress)
+    "22": [], // Web Server (Apache, Nginx)
+    "27": [], // Programming Language (PHP, ASP.net, etc),
+    "31": [], // CDN (CloudFlare, etc)
+    "62": [], // PaaS (Pantheon, Acquia, etc)
+    "64": [] // Reverse proxy (Nginx)
+  };
+
   //   Check for URL query param
   if (req.query.hasOwnProperty("url")) {
     let results = [];
@@ -48,7 +48,7 @@ exports.processDomain = async (req, res) => {
         return {};
       });
     if (data.hasOwnProperty("applications")) {
-      processApps(data.applications);
+      processApps(data.applications, wapResults);
     }
   }
   res.send(wapResults);
@@ -69,11 +69,11 @@ function getRealUrl(url) {
  * Process all detected Wappalyzer applications
  * @param {array} apps An array of applications detected on domain.
  */
-function processApps(apps) {
+function processApps(apps, wapResults) {
   apps.forEach(el => {
     if (el.hasOwnProperty("categories")) {
       let cats = el["categories"];
-      cats.forEach(e => matchCategories(e, el));
+      cats.forEach(e => matchCategories(e, el, wapResults));
     }
   });
   // Convert arrays to strings
@@ -89,7 +89,7 @@ function processApps(apps) {
  * @param {object} cat Category to check.
  * @param {object} app Application object with name.
  */
-function matchCategories(cat, app) {
+function matchCategories(cat, app, wapResults) {
   let keys = Object.keys(wapResults);
   for (let key = 0; key < keys.length; key++) {
     const k = keys[key];
