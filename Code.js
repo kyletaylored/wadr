@@ -61,7 +61,7 @@ function processUrls() {
         Logger.log(data);
         // Paste categories into new sheet.
         var row = [];
-        row.push(domain, data['1'], data['22'], data['27'], data['31'], data['62'], data['64']);
+        row.push(domain, data['1'], data['22'], data['27'], data['31'], data['57'], data['62'], data['64']);
         domainReport.appendRow(row);
         // Paste "complete" into next column to denote completion of Wappalyzer call
         // dataSheet.getRange(i, domainColumn+1).setValue("complete");
@@ -82,12 +82,19 @@ function processUrls() {
 function getCategories (url) {
   var apiEndpoint = "https://us-central1-wadr-report.cloudfunctions.net/process-domain?url=" + url;
 
+  let wapResults = {
+    "1": [], // CMS (Drupal, WordPress)
+    "22": [], // Web Server (Apache, Nginx)
+    "27": [], // Programming Language (PHP, ASP.net, etc),
+    "31": [], // CDN (CloudFlare, etc)
+    "57": [], // Static Site Generator
+    "62": [], // PaaS (Pantheon, Acquia, etc)
+    "64": [] // Reverse proxy (Nginx)
+  };
+
   //  Fetch data
   var response = UrlFetchApp.fetch(apiEndpoint, {muteHttpExceptions: true});
-  console.log("responseCode", response.getResponseCode());
-  console.log("contentText", response.getContentText());
-  console.log("headers", response.getHeaders());
-  var res = (parseInt(response.getResponseCode()) !== 200) ? JSON.stringify("{}") : response;
+  var res = (parseInt(response.getResponseCode()) !== 200) ? JSON.stringify(wapResults) : response;
   console.log("response parse", res);
   return JSON.parse(res);
 };

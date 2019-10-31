@@ -21,11 +21,12 @@ exports.helloWorld = (req, res) => {
  */
 exports.processDomain = async (req, res) => {
   // Default Wappalyzer Groups
-  let wapResults = {
+  var wapResults = {
     "1": [], // CMS (Drupal, WordPress)
     "22": [], // Web Server (Apache, Nginx)
     "27": [], // Programming Language (PHP, ASP.net, etc),
     "31": [], // CDN (CloudFlare, etc)
+    "57": [], // Static Site Generator
     "62": [], // PaaS (Pantheon, Acquia, etc)
     "64": [] // Reverse proxy (Nginx)
   };
