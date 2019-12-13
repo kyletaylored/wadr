@@ -82,7 +82,7 @@ function processApps(apps, wapResults) {
     wapResults[v] = wapResults[v].join(", ");
   });
 
-  console.log(wapResults);
+  console.log("wapresults", wapResults);
 }
 
 /**
