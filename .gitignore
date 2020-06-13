@@ -102,3 +102,6 @@ public
 
 # Custom
 .clasp.json
+
+# data
+.csv

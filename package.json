@@ -5,7 +5,14 @@
   "main": "index.js",
   "scripts": {
     "hello": "functions-framework --target=helloWorld",
-    "start": "functions-framework --target=processDomain"
+    "start": "npm-watch startWatch",
+    "inspect": "npm-watch inspectWatch",
+    "startWatch": "npx @google-cloud/functions-framework --target=processDomain",
+    "inspectWatch": "npx --node-arg=--inspect @google-cloud/functions-framework --target=processDomain"
+  },
+  "watch": {
+    "startWatch": "*.js",
+    "inspectWatch": "*.js"
   },
   "repository": {
     "type": "git",
@@ -26,10 +33,18 @@
   },
   "homepage": "https://github.com/kyletaylored/wadr#readme",
   "dependencies": {
-    "@google-cloud/functions-framework": "^1.3.2",
+    "@google-cloud/functions-framework": "^1.5.1",
+    "cli-progress": "^3.8.2",
+    "csv-append": "^1.0.0",
+    "csv-parser": "^2.3.3",
+    "neat-csv": "^5.2.0",
     "node-fetch": "^2.6.0",
     "normalize-url": "^4.5.0",
-    "request": "^2.88.0",
-    "wappalyzer": "^5.8.4"
+    "request": "^2.88.2",
+    "similarweb-scrape": "0.0.1",
+    "wappalyzer": "^6.0.8"
+  },
+  "devDependencies": {
+    "npm-watch": "^0.6.0"
   }
 }
