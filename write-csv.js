@@ -2,6 +2,7 @@ const processApps = require('./index.js').processApps
 const neatCsv = require('neat-csv')
 const fs = require('fs')
 const Wappalyzer = require('wappalyzer')
+const normalizeUrl = require('normalize-url')
 const csvAppend = require('csv-append').csvAppend
 const RELATIVE_PATH_TO_CSV = `./hate-out.csv`
 const { append, end } = csvAppend(RELATIVE_PATH_TO_CSV)
@@ -33,7 +34,7 @@ let objFilter = (obj, key, value) => {
   return found
 }
 
-fs.readFile('hate-in.csv', async (err, data) => {
+fs.readFile('hate2-test.csv', async (err, data) => {
   if (err) {
     console.error(err)
     return
@@ -45,7 +46,8 @@ fs.readFile('hate-in.csv', async (err, data) => {
   neatCsv(data).then((hates) => {
     hates.forEach(async (hate) => {
       try {
-        let url = hate['Website']
+        let url = hate['Domain']
+        url = normalizeUrl(url)
         let site = await wappalyzer.open(url)
 
         // Optionally capture and output errors
@@ -60,12 +62,11 @@ fs.readFile('hate-in.csv', async (err, data) => {
 
               // Get good URL
               let goodUrl = objFilter(d.urls, 'status', 200)
-              goodUrl = goodUrl == '' ? hate['Website'] : goodUrl
+              goodUrl = goodUrl == '' ? hate['Domain'] : goodUrl
 
               // Add back group data.
-              tmp['Ideology'] = hate['Ideology']
               tmp['Group'] = hate['Group']
-              tmp['Website'] = goodUrl
+              tmp['Domain'] = goodUrl
 
               // Write to CSV, delete object.
               console.log(tmp)
