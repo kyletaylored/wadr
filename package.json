@@ -38,7 +38,7 @@
     "csv-append": "^1.0.0",
     "csv-parser": "^2.3.3",
     "neat-csv": "^5.2.0",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.1",
     "normalize-url": "^4.5.0",
     "request": "^2.88.2",
     "similarweb-scrape": "0.0.1",
