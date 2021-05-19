@@ -1,14 +1,11 @@
 const Wappalyzer = require('wappalyzer')
 const normalizeUrl = require('normalize-url')
-const request = require('request')
 
 // Wappalyzer options
 const options = {
   // debug: true,
-  delay: 500,
-  maxUrls: 1,
-  maxWait: 5000,
-  recursive: false,
+  delay: 1000,
+  maxWait: 10000,
   userAgent: 'Wappalyzer',
 }
 
@@ -23,7 +20,7 @@ exports.processDomain = async (req, res) => {
   //   Check for URL query param
   if (req.query.hasOwnProperty('url')) {
     //   Normalize URL
-    let url = this.getRealUrl(req.query.url)
+    let url = normalizeUrl(req.query.url)
     await this._processWap(url).then((d) => {
       res.send(d)
     })
@@ -33,57 +30,36 @@ exports.processDomain = async (req, res) => {
 }
 
 exports._processWap = async (url) => {
-  // Default Wappalyzer Groups
-  const wapResults = {
-    '1': [], // CMS (Drupal, WordPress)
-    '22': [], // Web Server (Apache, Nginx)
-    '27': [], // Programming Language (PHP, ASP.net, etc),
-    '31': [], // CDN (CloudFlare, etc)
-    '57': [], // Static Site Generator
-    '62': [], // PaaS (Pantheon, Acquia, etc)
-    '64': [], // Reverse proxy (Nginx)
-  }
-
   // Prepare Wappalyzer
-  const wappalyzer = await new Wappalyzer(options)
+  const wappalyzer = new Wappalyzer(options)
+  let results = {}
 
   try {
     await wappalyzer.init()
     // Analyze request.
     console.log(url)
-    const site = await wappalyzer.open(url)
+    const site = wappalyzer.open(url)
 
     // Optionally capture and output errors
     site.on('error', console.error)
 
-    const data = site.analyze()
-    console.log(data)
-    // Log data
-    // console.log(data)
+    // Analyze data
+    const data = await site.analyze()
 
-    if (data.hasOwnProperty('applications')) {
-      this.processApps(data.applications, wapResults)
+    // Get technology data
+    if (data.hasOwnProperty('technologies')) {
+      Object.assign(results, this.processApps(data.technologies))
+    }
+
+    // Get URL data
+    if (data.hasOwnProperty('urls')) {
+      Object.assign(results, this.processUrls(data.urls))
     }
   } catch (e) {
     console.error(e)
   }
 
-  return wapResults
-}
-
-/**
- * Catch any redirects.
- * @param {string} url A URL link.
- */
-exports.getRealUrl = (url) => {
-  try {
-    url = normalizeUrl(url)
-    var r = request.get(url)
-
-    return r.uri.href
-  } catch (e) {
-    return null
-  }
+  return results
 }
 
 /**
@@ -93,18 +69,18 @@ exports.getRealUrl = (url) => {
 exports.processApps = (apps) => {
   // Wap shell.
   let wapResults = {
-    '1': [], // CMS (Drupal, WordPress)
-    '22': [], // Web Server (Apache, Nginx)
-    '27': [], // Programming Language (PHP, ASP.net, etc),
-    '31': [], // CDN (CloudFlare, etc)
-    '57': [], // Static Site Generator
-    '62': [], // PaaS (Pantheon, Acquia, etc)
-    '64': [], // Reverse proxy (Nginx)
+    1: [], // CMS (Drupal, WordPress)
+    22: [], // Web Server (Apache, Nginx)
+    27: [], // Programming Language (PHP, ASP.net, etc),
+    31: [], // CDN (CloudFlare, etc)
+    57: [], // Static Site Generator
+    62: [], // PaaS (Pantheon, Acquia, etc)
+    64: [], // Reverse proxy (Nginx)
   }
   apps.forEach((app) => {
     if (app.hasOwnProperty('categories')) {
-      for (var category in app['categories']) {
-        matchCategories(category, app, wapResults)
+      for (let category in app['categories']) {
+        matchCategories(app['categories'][category].id, app, wapResults)
       }
     }
   })
@@ -113,7 +89,53 @@ exports.processApps = (apps) => {
     wapResults[v] = wapResults[v].join(', ')
   })
 
+  // Add category names vs numbers
+  const WapCat = {
+    1: 'cms',
+    22: 'web_server',
+    27: 'programming_language',
+    31: 'cdn',
+    57: 'static_site',
+    62: 'platform',
+    64: 'reverse_proxy',
+  }
+  for (cat in WapCat) {
+    delete Object.assign(wapResults, { [WapCat[cat]]: wapResults[cat] })[cat]
+  }
+
   return wapResults
+}
+
+exports.processUrls = (urls) => {
+  // Get the first URL, check for redirect.
+  let listUrls = Object.keys(urls)
+  let firstUrl = listUrls[0]
+  let lastUrl = listUrls.pop()
+  let status = urls[listUrls[0]].status
+  let originMatch = false
+  let fsu = this.stripURl(firstUrl)
+  let lsu = this.stripURl(lastUrl)
+  if (fsu == lsu) {
+    originMatch = true
+  }
+
+  return {
+    url: firstUrl,
+    redirect_url: lastUrl,
+    http_status: status,
+    origin_match: originMatch,
+  }
+}
+
+/**
+ * Return a clean URL stripped down to base domain.
+ * @param {string} url
+ * @returns
+ */
+exports.stripURl = (url) => {
+  return normalizeUrl(url, { stripProtocol: true, stripHash: true }).split(
+    '/'
+  )[0]
 }
 
 /**
@@ -125,7 +147,7 @@ function matchCategories(cat, app, wapResults) {
   let keys = Object.keys(wapResults)
   for (let key = 0; key < keys.length; key++) {
     const k = keys[key]
-    if (cat === k) {
+    if (cat == k) {
       wapResults[cat].push(app['name'])
     }
   }
