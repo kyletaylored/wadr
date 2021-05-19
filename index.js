@@ -43,17 +43,15 @@ exports._processWap = async (url) => {
     // Optionally capture and output errors
     site.on('error', console.error)
 
+    // Analyze data
     const data = await site.analyze()
-    console.log(data)
-    // Log data
-    // console.log(data)
 
     // Get technology data
     if (data.hasOwnProperty('technologies')) {
       Object.assign(results, this.processApps(data.technologies))
     }
 
-    // Get URL
+    // Get URL data
     if (data.hasOwnProperty('urls')) {
       Object.assign(results, this.processUrls(data.urls))
     }
@@ -91,6 +89,20 @@ exports.processApps = (apps) => {
     wapResults[v] = wapResults[v].join(', ')
   })
 
+  // Add category names vs numbers
+  const WapCat = {
+    1: 'cms',
+    22: 'web_server',
+    27: 'programming_language',
+    31: 'cdn',
+    57: 'static_site',
+    62: 'platform',
+    64: 'reverse_proxy',
+  }
+  for (cat in WapCat) {
+    delete Object.assign(wapResults, { [WapCat[cat]]: wapResults[cat] })[cat]
+  }
+
   return wapResults
 }
 
@@ -109,9 +121,9 @@ exports.processUrls = (urls) => {
 
   return {
     url: firstUrl,
-    redirectUrl: lastUrl,
-    httpStatus: status,
-    originMatch: originMatch,
+    redirect_url: lastUrl,
+    http_status: status,
+    origin_match: originMatch,
   }
 }
 
