@@ -1,0 +1,10 @@
+steps:
+  - name: gcr.io/cloud-builders/gcloud
+    args:
+      - functions
+      - deploy
+      - --trigger-http # HTTP trigger
+      - --runtime=nodejs14
+      - --entry-point=processDomain # Defined function in index.js
+      - --allow-unauthenticated # Enable anonymous access
+      - wadr # Cloud Function name
