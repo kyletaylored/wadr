@@ -8,7 +8,7 @@
     "start": "npm-watch startWatch",
     "inspect": "npm-watch inspectWatch",
     "startWatch": "npx @google-cloud/functions-framework --target=processDomain",
-    "inspectWatch": "npx --node-arg=--inspect @google-cloud/functions-framework --target=processDomain"
+    "inspectWatch": "npx --node-arg=--inspect @google-cloud/functions-framework --target=processDomain",
     "deploy": "gcloud functions deploy wadr --project pantheon-sales --entry-point processDomain --runtime nodejs14 --trigger-http --allow-unauthenticated"
   },
   "watch": {
