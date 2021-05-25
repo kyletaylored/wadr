@@ -8,6 +8,9 @@ const options = {
   maxWait: 10000,
   userAgent: 'Wappalyzer',
 }
+// Prepare Wappalyzer
+const wappalyzer = new Wappalyzer(options)
+wappalyzer.init()
 
 exports.helloWorld = (req, res) => {
   res.send('Hello, World')
@@ -30,12 +33,8 @@ exports.processDomain = async (req, res) => {
 }
 
 exports._processWap = async (url) => {
-  // Prepare Wappalyzer
-  const wappalyzer = new Wappalyzer(options)
   let results = {}
-
   try {
-    await wappalyzer.init()
     // Analyze request.
     console.log(url)
     const site = wappalyzer.open(url)
