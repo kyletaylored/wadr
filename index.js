@@ -109,8 +109,9 @@ exports.processUrls = (urls) => {
   // Get the first URL, check for redirect.
   let listUrls = Object.keys(urls)
   let firstUrl = listUrls[0]
+  urls[firstUrl].status ??= ''
   let lastUrl = listUrls.pop()
-  let status = urls[listUrls[0]].status
+  let status = urls[firstUrl].status
   let originMatch = false
   let fsu = this.stripURl(firstUrl)
   let lsu = this.stripURl(lastUrl)
