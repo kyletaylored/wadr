@@ -34,15 +34,15 @@
   },
   "homepage": "https://github.com/kyletaylored/wadr#readme",
   "dependencies": {
-    "@google-cloud/functions-framework": "^1.7.1",
+    "@google-cloud/functions-framework": "^1.9.0",
     "cli-progress": "^3.9.0",
     "csv-append": "^1.0.0",
     "csv-parser": "^2.3.5",
     "neat-csv": "^5.2.0",
     "node-fetch": "^2.6.1",
-    "npm-watch": "^0.6.0",
-    "normalize-url": "^4.5.0",
+    "normalize-url": "^4.5.1",
+    "npm-watch": "^0.10.0",
     "similarweb-scrape": "0.0.1",
-    "wappalyzer": "^6.6.0"
+    "wappalyzer": "^6.7.9"
   }
 }

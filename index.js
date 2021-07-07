@@ -150,7 +150,14 @@ function matchCategories(cat, app, wapResults) {
   for (let key = 0; key < keys.length; key++) {
     const k = keys[key]
     if (cat == k) {
-      wapResults[cat].push(app['name'])
+      // Get CMS version
+      if (['drupal','wordpress'].includes(app.slug) && app.version !== null) {
+        // Get only the major version
+        let majorVersion = app.version.split('.')[0];
+        wapResults[cat].push(app.name + ' ' + majorVersion)
+      } else {
+        wapResults[cat].push(app.name)
+      }
     }
   }
 }
