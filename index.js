@@ -69,6 +69,7 @@ exports.processApps = (apps) => {
   // Wap shell.
   let wapResults = {
     1: [], // CMS (Drupal, WordPress)
+    999: [], // CMS version (custom)
     22: [], // Web Server (Apache, Nginx)
     27: [], // Programming Language (PHP, ASP.net, etc),
     31: [], // CDN (CloudFlare, etc)
@@ -91,6 +92,7 @@ exports.processApps = (apps) => {
   // Add category names vs numbers
   const WapCat = {
     1: 'cms',
+    999: 'cms_version',
     22: 'web_server',
     27: 'programming_language',
     31: 'cdn',
@@ -153,11 +155,13 @@ function matchCategories(cat, app, wapResults) {
       // Get CMS version
       if (['drupal','wordpress'].includes(app.slug) && app.version !== null) {
         // Get only the major version
-        let majorVersion = app.version.split('.')[0];
-        wapResults[cat].push(app.name + ' ' + majorVersion)
-      } else {
-        wapResults[cat].push(app.name)
+        let cmsVersion = app.version.split('.')[0];
+        wapResults[999].push(cmsVersion)
       }
+
+      // Record technology.
+      wapResults[cat].push(app.name)
+      
     }
   }
 }
