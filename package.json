@@ -43,6 +43,6 @@
     "normalize-url": "^4.5.1",
     "npm-watch": "^0.10.0",
     "similarweb-scrape": "0.0.1",
-    "wappalyzer": "^6.7.9"
+    "wappalyzer": "^6.7.11"
   }
 }
