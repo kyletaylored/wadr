@@ -23,9 +23,9 @@ exports.entry = async (req, res) => {
   const paths = getPaths(req.path);
   console.log(paths);
 
-  if (paths[2] == "domains") {
+  if (paths[1] == "domains") {
     await this.securitytrails(req, res);
-  } else if (paths[2] == "analyze") {
+  } else if (paths[1] == "analyze") {
     await this.wappalyzer(req, res);
   } else {
     res.json({ error: "Something went wrong" });
@@ -50,7 +50,7 @@ exports.securitytrails = async (req, res) => {
   logger.info("Get domains from Security Trails");
   const stapi = require("./utils/securitytrails");
   const paths = getPaths(req.path);
-  const domain = paths[3];
+  const domain = paths[2];
   let maxpage = req.query && req.query.maxpage ? req.query.maxpage : 0;
 
   const domains = await stapi.get_domains(domain, maxpage);
@@ -65,7 +65,7 @@ exports.securitytrails = async (req, res) => {
 exports.wappalyzer = async (req, res) => {
   logger.info("Process domains in Wappalyzer");
   const paths = getPaths(req.path);
-  const domain = paths[3];
+  const domain = paths[2];
   const { processDomain } = require("./utils/wappalyzer");
   const data = await processDomain(domain);
   res.json(data);
