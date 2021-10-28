@@ -1,7 +1,7 @@
 {
-  "name": "wadr",
-  "version": "1.0.0",
-  "description": "Wappalyzer domain report tool.",
+  "name": "pantheon-almanac-functions",
+  "version": "0.0.1",
+  "description": "A set of domain prospecting tools built on Google Cloud Functions.",
   "main": "index.js",
   "scripts": {
     "hello": "functions-framework --target=helloWorld",
@@ -25,9 +25,19 @@
     "google",
     "sheets",
     "app",
-    "script"
+    "script",
+    "security trails"
   ],
-  "author": "Kyle Taylor",
+  "contributors": [
+    {
+      "name": "Kyle Taylor",
+      "email": "kyle.taylor@pantheon.io"
+    },
+    {
+      "name": "Renée Stephen",
+      "email": "renee.stephen@pantheon.io"
+    }
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/kyletaylored/wadr/issues"
