@@ -17,7 +17,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kyletaylored/wadr.git"
+    "url": "git+https://github.com/Pantheon-SE/pantheon-almanac-functions.git"
   },
   "keywords": [
     "wappalyzer",
@@ -40,9 +40,9 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/kyletaylored/wadr/issues"
+    "url": "https://github.com/Pantheon-SE/pantheon-almanac-functions/issues"
   },
-  "homepage": "https://github.com/kyletaylored/wadr#readme",
+  "homepage": "https://github.com/Pantheon-SE/pantheon-almanac-functions#readme",
   "dependencies": {
     "@google-cloud/functions-framework": "^1.9.0",
     "cli-progress": "^3.9.0",
@@ -53,7 +53,7 @@
     "npm-watch": "^0.10.0",
     "pino": "^7.0.5",
     "pino-http": "^5.8.0",
-    "securitytrails-js": "git+https://github.com/kyletaylored/securitytrails-js.git#update-stapi-endpoints",
+    "securitytrails": "^2.0.0",
     "user-agents": "^1.0.817",
     "wappalyzer": "^6.8.19"
   }
