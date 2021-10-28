@@ -21,6 +21,7 @@ exports.entry = async (req, res) => {
   initLogCorrelation(project);
 
   const paths = getPaths(req.path);
+  console.log(paths);
 
   if (paths[2] == "domains") {
     await this.securitytrails(req, res);
