@@ -7,9 +7,9 @@
     "hello": "functions-framework --target=helloWorld",
     "start": "npm-watch startWatch",
     "inspect": "npm-watch inspectWatch",
-    "startWatch": "npx @google-cloud/functions-framework --target=processDomain",
-    "inspectWatch": "npx --node-arg=--inspect @google-cloud/functions-framework --target=processDomain",
-    "deploy": "gcloud functions deploy wadr --project pantheon-sales --entry-point processDomain --runtime nodejs14 --trigger-http --allow-unauthenticated"
+    "startWatch": "npx @google-cloud/functions-framework --target=entry",
+    "inspectWatch": "npx --node-arg=--inspect @google-cloud/functions-framework --target=entry",
+    "deploy": "gcloud functions deploy almanac --project pantheon-sales --entry-point entry --runtime nodejs14 --trigger-http --allow-unauthenticated"
   },
   "watch": {
     "startWatch": "*.js",
@@ -36,13 +36,15 @@
   "dependencies": {
     "@google-cloud/functions-framework": "^1.9.0",
     "cli-progress": "^3.9.0",
-    "csv-append": "^1.0.0",
-    "csv-parser": "^2.3.5",
-    "neat-csv": "^5.2.0",
-    "node-fetch": "^2.6.1",
+    "dotenv": "^10.0.0",
+    "gcp-metadata": "^4.3.1",
+    "google-auth-library": "^7.10.1",
     "normalize-url": "^4.5.1",
     "npm-watch": "^0.10.0",
-    "similarweb-scrape": "0.0.1",
-    "wappalyzer": "^6.7.11"
+    "pino": "^7.0.5",
+    "pino-http": "^5.8.0",
+    "securitytrails-js": "git+https://github.com/kyletaylored/securitytrails-js.git#update-stapi-endpoints",
+    "user-agents": "^1.0.817",
+    "wappalyzer": "^6.8.19"
   }
 }
