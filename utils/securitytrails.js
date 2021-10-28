@@ -1,4 +1,4 @@
-const stapi = require("securitytrails-js");
+const stapi = require("securitytrails");
 const wait = require("util").promisify(setTimeout);
 const { logger, pinoHttp } = require("./logging");
 const STAPI = new stapi(process.env.ST_API_KEY);
