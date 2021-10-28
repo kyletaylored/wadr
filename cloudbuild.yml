@@ -5,6 +5,6 @@ steps:
       - deploy
       - --trigger-http # HTTP trigger
       - --runtime=nodejs14
-      - --entry-point=processDomain # Defined function in index.js
+      - --entry-point=entry # Defined function in index.js
       - --allow-unauthenticated # Enable anonymous access
-      - wadr # Cloud Function name
+      - almanac # Cloud Function name
