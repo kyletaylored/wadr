@@ -64,8 +64,15 @@ exports.securitytrails = async (req, res) => {
  */
 exports.wappalyzer = async (req, res) => {
   logger.info("Process domains in Wappalyzer");
-  const paths = getPaths(req.path);
-  const domain = paths[2];
+  // Check if we have a domain available
+  let domain = "";
+  // Optionally accept a domain via query parameter.
+  if (req.query.hasOwnProperty("domain")) {
+    domain = req.query.domain;
+  } else {
+    const paths = getPaths(req.path);
+    domain = paths[2];
+  }
   const { processDomain } = require("./utils/wappalyzer");
   const data = await processDomain(domain);
   res.json(data);
