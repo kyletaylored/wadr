@@ -105,6 +105,10 @@ exports.processApps = (apps) => {
     76: [], // Personalization
     32: [], // Marketing Automation
     19: [], // Miscellaneous
+    97: [], // Customer Data Platform
+    95: [], // Digital Asset Management
+    6: [], // E-Commerce
+    51: [], // Page Builders
   };
   apps.forEach((app) => {
     if (app.hasOwnProperty("categories")) {
@@ -133,6 +137,10 @@ exports.processApps = (apps) => {
     76: "personalization",
     32: "marketing_automation",
     19: "miscellaneous",
+    97: "customer_data_platform",
+    95: "digital_asset_management",
+    6: "ecommerce",
+    51: "page_builders",
   };
   for (cat in WapCat) {
     delete Object.assign(wapResults, { [WapCat[cat]]: wapResults[cat] })[cat];
