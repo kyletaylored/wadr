@@ -21,11 +21,8 @@
   },
   "keywords": [
     "wappalyzer",
-    "report",
-    "google",
-    "sheets",
-    "app",
-    "script",
+    "google sheets",
+    "apps script",
     "security trails"
   ],
   "contributors": [
@@ -44,17 +41,18 @@
   },
   "homepage": "https://github.com/Pantheon-SE/pantheon-almanac-functions#readme",
   "dependencies": {
-    "@google-cloud/functions-framework": "^1.9.0",
+    "@google-cloud/functions-framework": "^1",
     "cli-progress": "^3.9.0",
     "dotenv": "^10.0.0",
     "gcp-metadata": "^4.3.1",
     "google-auth-library": "^7.10.1",
     "normalize-url": "^4.5.1",
     "npm-watch": "^0.10.0",
+    "pg": "^8.7.3",
     "pino": "^7.0.5",
     "pino-http": "^5.8.0",
     "securitytrails": "^2.0.0",
     "user-agents": "^1.0.817",
-    "wappalyzer": "^6.8.19"
+    "wappalyzer": "^6"
   }
 }
