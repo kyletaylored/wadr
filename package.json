@@ -41,7 +41,7 @@
   },
   "homepage": "https://github.com/Pantheon-SE/pantheon-almanac-functions#readme",
   "dependencies": {
-    "@google-cloud/functions-framework": "^1",
+    "@google-cloud/functions-framework": "1.9.0",
     "cli-progress": "^3.9.0",
     "dotenv": "^10.0.0",
     "gcp-metadata": "^4.3.1",
