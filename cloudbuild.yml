@@ -4,7 +4,7 @@ steps:
       - functions
       - deploy
       - --trigger-http # HTTP trigger
-      - --runtime=nodejs14
+      - --runtime=nodejs16
       - --entry-point=entry # Defined function in index.js
       - --allow-unauthenticated # Enable anonymous access
       - almanac # Cloud Function name
