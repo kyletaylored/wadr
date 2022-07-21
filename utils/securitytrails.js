@@ -2,6 +2,10 @@ const stapi = require("securitytrails");
 const wait = require("util").promisify(setTimeout);
 const { logger, pinoHttp } = require("./logging");
 const STAPI = new stapi(process.env.ST_API_KEY);
+const { RateLimit } = require("async-sema");
+
+// Configure rate limiter (requests per second)
+const limit = RateLimit(2);
 
 const stResponseHandler = async (response) => {
   if (!response.ok) {
@@ -31,12 +35,11 @@ exports.get_domains = async (domain, maxPages) => {
   domainPromises.push(this.get_associated_domains(domain, maxPages));
 
   // Delay next, add subdomains
-  wait(1000);
+  await limit();
   domainPromises.push(this.get_subdomains(domain));
 
   await Promise.allSettled(domainPromises).then((results) => {
     // Merge domains
-    console.log(results);
     results.forEach((result) => {
       if (result.status === "fulfilled") {
         domains = domains.concat(result.value);
@@ -100,7 +103,6 @@ exports.get_subdomains = async (domain) => {
  * @returns array
  */
 const associated_domains_processing = (data) => {
-  console.log(data);
   const records = data.records;
   let domains = [];
 
@@ -129,22 +131,26 @@ const associated_domains_processing = (data) => {
  */
 const associated_domains_paging = async (domain, start, end) => {
   let domains = [];
-
   // Loop through pages, create promises
   let pagedDomains = [];
   for (let page = start; page < end + 1; page++) {
-    setTimeout(() => {
-      pagedDomains.push(STAPI.domains_associated_domains(domain, page));
-    }, 1000);
+    await limit();
+    pagedDomains.push(STAPI.domains_associated_domains(domain, page));
   }
 
+  // Wait for all promises to resolve
+  console.log(pagedDomains);
+
   // Handle results
-  await Promise.allSettled(pagedDomains).then((results) => {
-    results.forEach((record) => {
+  await Promise.allSettled(pagedDomains).then(async (results) => {
+    results.forEach(async (record) => {
       if (record.status === "fulfilled") {
         const response = record.value;
-        const data = response.then(stResponseHandler).catch(pinoHttp);
-        domains = domains.concat(associated_domains_processing(data));
+        await stResponseHandler(response)
+          .then((data) => {
+            domains = domains.concat(associated_domains_processing(data));
+          })
+          .catch((e) => logger.error(e));
       }
     });
   });

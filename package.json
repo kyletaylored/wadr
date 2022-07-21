@@ -1,6 +1,6 @@
 {
   "name": "pantheon-almanac-functions",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "A set of domain prospecting tools built on Google Cloud Functions.",
   "main": "index.js",
   "scripts": {
@@ -35,24 +35,21 @@
       "email": "renee.stephen@pantheon.io"
     }
   ],
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/Pantheon-SE/pantheon-almanac-functions/issues"
   },
   "homepage": "https://github.com/Pantheon-SE/pantheon-almanac-functions#readme",
   "dependencies": {
     "@google-cloud/functions-framework": "1.9.0",
-    "cli-progress": "^3.9.0",
+    "async-sema": "^3.1.1",
     "dotenv": "^10.0.0",
     "gcp-metadata": "^4.3.1",
     "google-auth-library": "^7.10.1",
     "normalize-url": "^4.5.1",
     "npm-watch": "^0.10.0",
-    "pg": "^8.7.3",
     "pino": "^7.0.5",
     "pino-http": "^5.8.0",
     "securitytrails": "^2.0.0",
-    "user-agents": "^1.0.817",
-    "wappalyzer": "^6.10.19"
+    "wappalyzer": "^6.10.38"
   }
 }
