@@ -57,6 +57,7 @@ exports.processDomain = async (url) => {
 exports._processWap = async (url) => {
   let results = {};
   let urls = this.getUrlVariations(url);
+  console.debug("urls", urls);
 
   // Optionally set additional request headers
   const headers = {};
@@ -71,8 +72,12 @@ exports._processWap = async (url) => {
 
         data = await site.analyze();
 
+        console.debug(data);
+
         // Stop if status isn't 0
-        if (data.urls[url].status !== 0) {
+        if (data.urls[url].hasOwnProperty("error")) {
+          continue;
+        } else {
           break;
         }
       } catch (err) {
@@ -204,7 +209,7 @@ exports.stripUrl = (url) => {
  * @return {array} An array of domains.
  */
 exports.getUrlVariations = (url) => {
-  url = normalizeUrl(url);
+  url = normalizeUrl(url, { stripWWW: false });
   const parseUrl = new URL(url);
 
   let domains = [
