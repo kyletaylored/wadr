@@ -42,8 +42,6 @@ exports.processDomains = async (domains = []) => {
  * Process domain requests.
  */
 exports.processDomain = async (url) => {
-  //   Normalize URL
-  url = normalizeUrl(url);
   let results = {};
   await this._processWap(url).then((data) => {
     results = data;
@@ -58,28 +56,43 @@ exports.processDomain = async (url) => {
  */
 exports._processWap = async (url) => {
   let results = {};
+  let urls = this.getUrlVariations(url);
+
+  // Optionally set additional request headers
+  const headers = {};
+
   try {
-    // Analyze request.
-    // console.log(url);
-    const site = wappalyzer.open(url);
+    await wappalyzer.init();
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
 
-    // Optionally capture and output errors
-    site.on("error", console.error);
+      try {
+        const site = await wappalyzer.open(url, headers);
 
-    // Analyze data
-    const data = await site.analyze();
-    // console.log(data);
-    // Get technology data
-    if (data.hasOwnProperty("technologies")) {
-      Object.assign(results, this.processApps(data.technologies));
+        data = await site.analyze();
+
+        // Stop if status isn't 0
+        if (data.urls[url].status !== 0) {
+          break;
+        }
+      } catch (err) {
+        console.log("wappalyzer catch", err);
+      }
     }
+  } catch (err) {
+    console.log("wappalyzer forloop", err);
+  }
 
-    // Get URL data
-    if (data.hasOwnProperty("urls")) {
-      Object.assign(results, this.processUrls(data.urls));
-    }
-  } catch (e) {
-    console.error(e);
+  await wappalyzer.destroy();
+
+  // Get technology data
+  if (data.hasOwnProperty("technologies")) {
+    Object.assign(results, this.processApps(data.technologies));
+  }
+
+  // Get URL data
+  if (data.hasOwnProperty("urls")) {
+    Object.assign(results, this.processUrls(data.urls));
   }
 
   return results;
@@ -159,8 +172,8 @@ exports.processUrls = (urls) => {
       ? 200
       : urls[firstUrl].status;
   let originMatch = false;
-  let fsu = this.stripURl(firstUrl);
-  let lsu = this.stripURl(lastUrl);
+  let fsu = this.stripUrl(firstUrl);
+  let lsu = this.stripUrl(lastUrl);
   if (fsu == lsu) {
     originMatch = true;
   }
@@ -178,10 +191,36 @@ exports.processUrls = (urls) => {
  * @param {string} url
  * @returns
  */
-exports.stripURl = (url) => {
-  return normalizeUrl(url, { stripProtocol: true, stripHash: true }).split(
-    "/"
-  )[0];
+exports.stripUrl = (url) => {
+  return normalizeUrl(url, {
+    stripProtocol: true,
+    stripHash: true,
+    stripWWW: false,
+  }).split("/")[0];
+};
+
+/**
+ * @param {string} url A url to parse.
+ * @return {array} An array of domains.
+ */
+exports.getUrlVariations = (url) => {
+  url = normalizeUrl(url);
+  const parseUrl = new URL(url);
+
+  let domains = [
+    "https://" + parseUrl.hostname + parseUrl.pathname,
+    "http://" + parseUrl.hostname + parseUrl.pathname,
+  ];
+
+  // Check for subdomains
+  const domainParts = parseUrl.hostname.split(".");
+  // If URL only contains domain and TLD, try www.
+  if (domainParts.length === 2) {
+    domainParts.unshift("www");
+    domains.push("https://" + domainParts.join(".") + parseUrl.pathname);
+  }
+
+  return domains;
 };
 
 /**
