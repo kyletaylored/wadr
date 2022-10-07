@@ -2,7 +2,7 @@
 
 ## A set of prospecting APIs built on Google Cloud Functions.
 
-A simple serverless function to support Google Sheets app script in adding additional info about domains.
+A simple serverless function to find additional digital properties and their technology based on a domain.
 
 ## Running Locally
 
@@ -10,7 +10,7 @@ You will neet a Secure Trails API key. Talk to Kyle to get that.
 
 ```
 echo 'ST_API_KEY=[insert key here]' > .env
-node i -D && node run start
+npm i && node run start
 ```
 
 Now you will have a running instance of the function and can query it like so:

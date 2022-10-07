@@ -1,6 +1,7 @@
 const Wappalyzer = require("wappalyzer");
 const normalizeUrl = require("normalize-url");
 const { logger } = require("./logging");
+const crypto = require("crypto");
 
 // Wappalyzer options
 const options = {
@@ -211,10 +212,11 @@ exports.stripUrl = (url) => {
 exports.getUrlVariations = (url) => {
   url = normalizeUrl(url, { stripWWW: false });
   const parseUrl = new URL(url);
+  const nonce = "?nonce=" + crypto.createHash("md5", url).digest("hex");
 
   let domains = [
-    "https://" + parseUrl.hostname + parseUrl.pathname,
-    "http://" + parseUrl.hostname + parseUrl.pathname,
+    "https://" + parseUrl.hostname + parseUrl.pathname + nonce,
+    "http://" + parseUrl.hostname + parseUrl.pathname + nonce,
   ];
 
   // Check for subdomains
