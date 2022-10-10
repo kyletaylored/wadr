@@ -212,7 +212,7 @@ exports.stripUrl = (url) => {
 exports.getUrlVariations = (url) => {
   url = normalizeUrl(url, { stripWWW: false });
   const parseUrl = new URL(url);
-  const nonce = "?nonce=" + crypto.createHash("md5", url).digest("hex");
+  const nonce = "?nonce=" + crypto.createHash("md5").update(url).digest("hex");
 
   let domains = [
     "https://" + parseUrl.hostname + parseUrl.pathname + nonce,
