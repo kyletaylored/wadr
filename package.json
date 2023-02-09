@@ -50,6 +50,6 @@
     "pino": "^7.0.5",
     "pino-http": "^5.8.0",
     "securitytrails": "^2.0.0",
-    "wappalyzer": "^6.10.41"
+    "wappalyzer": "^6.10.55"
   }
 }
