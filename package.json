@@ -9,7 +9,9 @@
     "inspect": "npm-watch inspectWatch",
     "startWatch": "npx @google-cloud/functions-framework --target=entry",
     "inspectWatch": "npx --node-arg=--inspect @google-cloud/functions-framework --target=entry",
-    "deploy": "gcloud functions deploy almanac --project pantheon-sales --entry-point entry --runtime nodejs14 --trigger-http --allow-unauthenticated"
+    "deploy": "gcloud functions deploy almanac --project pantheon-sales --entry-point entry --runtime nodejs14 --trigger-http --allow-unauthenticated",
+    "gcp-build": "node node_modules/puppeteer/install.js",
+    "postinstall": "node node_modules/puppeteer/install.js"
   },
   "watch": {
     "startWatch": "*.js",
